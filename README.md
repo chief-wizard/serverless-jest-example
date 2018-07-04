@@ -3,76 +3,36 @@ title: AWS Simple HTTP Endpoint example in NodeJS
 description: This example demonstrates how to setup a simple HTTP GET endpoint. Once you ping it, it will reply with the current time.
 layout: Doc
 -->
-# Simple HTTP Endpoint Example
+# Simple HTTP Endpoint Example + Jest tests
 
-This example demonstrates how to setup a simple HTTP GET endpoint. Once you ping it, it will reply with the current time. While the internal function is name `currentTime` the HTTP endpoint is exposed as `ping`.
-
-## Use Cases
-
-- Wrapping an existing internal or external endpoint/service
+This example is based on the [Simple HTTP Endpoint](https://github.com/serverless/examples/tree/master/aws-node-simple-http-endpoint)
+example, and adds Jest unit tests to it.
 
 ## Invoke the function locally
 
 ```bash
-serverless invoke local --function currentTime
-```
-
-Which should result in:
-
-```bash
-Serverless: Your function ran successfully.
-
+$ sls invoke local -f localGreeting
 {
     "statusCode": 200,
-    "body": "{\"message\":\"Hello, the current time is 12:49:06 GMT+0100 (CET).\"}"
+    "body": "{\"message\":\"Hello!\"}"
 }
 ```
 
-## Deploy
+## Run the tests
 
-In order to deploy the you endpoint simply run
-
-```bash
-serverless deploy
-```
-
-The expected result should be similar to:
+Run the tests via `yarn`:
 
 ```bash
-Serverless: Packaging service…
-Serverless: Uploading CloudFormation file to S3…
-Serverless: Uploading service .zip file to S3…
-Serverless: Updating Stack…
-Serverless: Checking Stack update progress…
-...........................
-Serverless: Stack update finished…
+$ yarn run jest
+yarn run v1.7.0
+$ /Users/serverless/aws-node-simple-http-endpoint/node_modules/.bin/jest
+ PASS  __tests__/handler.test.js
+  ✓ correct greeting is generated (5ms)
 
-Service Information
-service: serverless-simple-http-endpoint
-stage: dev
-region: us-east-1
-api keys:
-  None
-endpoints:
-  GET - https://2e16njizla.execute-api.us-east-1.amazonaws.com/dev/ping
-functions:
-  serverless-simple-http-endpoint-dev-currentTime: arn:aws:lambda:us-east-1:488110005556:function:serverless-simple-http-endpoint-dev-currentTime
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.557s
+Ran all test suites.
+✨  Done in 2.85s.
 ```
-
-## Usage
-
-You can now invoke the Lambda directly and even see the resulting log via
-
-```bash
-serverless invoke --function currentTime --log
-```
-
-or as send an HTTP request directly to the endpoint using a tool like curl
-
-```bash
-curl https://XXXXXXX.execute-api.us-east-1.amazonaws.com/dev/ping
-```
-
-## Scaling
-
-By default, AWS Lambda limits the total concurrent executions across all functions within a given region to 100. The default limit is a safety limit that protects you from costs due to potential runaway or recursive functions during initial development and testing. To increase this limit above the default, follow the steps in [To request a limit increase for concurrent executions](http://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html#increase-concurrent-executions-limit).
