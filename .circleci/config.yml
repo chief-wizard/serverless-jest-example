@@ -26,6 +26,8 @@ jobs:
             yarn run jest
           environment:
             JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
+      - store_test_results:
+          path: test-results
 
 workflows:
   version: 2
